@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
@@ -15,8 +16,6 @@ type Server struct {
 	spends repository.Spends
 	users  repository.Users
 	app    *fiber.App
-
-	// todo: add secret key here
 }
 
 // New returns a new Server instance
@@ -40,6 +39,15 @@ func (s *Server) register() {
 	app.Use(logger.New(logger.Config{
 		Format: "[${time}] ${status} - ${method} ${path} Body: ${green}${body}${white}\n",
 	}))
+
+	app.Use(func(c *fiber.Ctx) error {
+		err := c.Next()
+		if err != nil {
+			log.Println(err)
+		}
+
+		return err
+	})
 
 	app.Use("/p/home", jwtware.New(jwtware.Config{
 		SigningKey:  jwtware.SigningKey{Key: []byte(secretKey)},
@@ -72,13 +80,10 @@ func (s *Server) register() {
 	app.Post("/auth/login", s.Login)
 	app.Post("/auth/signin", s.Signin)
 	app.Get("/auth/logout", s.Logout)
-	// app.Post("/auth/logout", s.Logout)
 
 	// pages
 	app.Get("/p/auth", s.Auth)
 	app.Get("/p/home", s.Home)
-
-	// /uri    ---> function (mapping)
 
 	// apis
 	app.Get("/api/spends/get", s.GetSpends)
@@ -88,7 +93,7 @@ func (s *Server) register() {
 	app.Get("/api/spends/percentage/:tag", s.PercentageByTag)
 
 	app.Post("/api/spends/update/:id", s.UpdateSpendById)
-	app.Get("/api/spends/delete/:id", s.DeleteSpendById)
+	app.Delete("/api/spends/delete/:id", s.DeleteSpendById)
 }
 
 // Start starts the server

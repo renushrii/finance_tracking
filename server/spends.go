@@ -8,8 +8,6 @@ import (
 	"github.com/renushrii/finance-tracking/repository"
 )
 
-// /spends/:from/:to
-// /spends?from=2021-01-01&to=2021-01-31
 func (s *Server) GetSpends(c *fiber.Ctx) error {
 	userID, err := getUserID(c)
 	if err != nil {
@@ -39,8 +37,7 @@ func (s *Server) GetSpends(c *fiber.Ctx) error {
 }
 
 func (s *Server) CreateSpend(c *fiber.Ctx) error {
-	// todo: change this to use FormValue
-	description := c.FormValue("discription")
+	description := c.FormValue("description")
 	tag := c.FormValue("tag")
 	amountstr := c.FormValue("amount")
 
@@ -65,7 +62,7 @@ func (s *Server) CreateSpend(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.Redirect("/p/home")
+	return c.Redirect("/p/home?msg=spend created successfully")
 
 }
 
@@ -105,7 +102,7 @@ func (s *Server) UpdateSpendById(c *fiber.Ctx) error {
 	if err := s.spends.Update(spend); err != nil {
 		return err
 	}
-	return c.SendString("updated successfully")
+	return c.Redirect("/p/home?msg=spend updated successfully")
 }
 
 func (s *Server) DeleteSpendById(c *fiber.Ctx) error {
@@ -122,7 +119,7 @@ func (s *Server) DeleteSpendById(c *fiber.Ctx) error {
 	if err := s.spends.Delete(userID, ID); err != nil {
 		return err
 	}
-	return c.Redirect("/p/home")
+	return c.Redirect("/p/home?msg=spend deleted successfully")
 }
 
 func (s *Server) PercentageByTag(c *fiber.Ctx) error {

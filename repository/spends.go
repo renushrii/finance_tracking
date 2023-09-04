@@ -16,8 +16,16 @@ type Spends interface {
 	Create(spend Spend) (int, error)
 	// GetByTag returns spends which have the given tag
 	GetByTag(userID int, tag string) ([]Spend, error)
+
+	TagsAmount(userId int, from, to time.Time) ([]TagsAmount, error)
+
 	Delete(userID, id int) error
 	Update(spend Spend) error
+}
+
+type TagsAmount struct {
+	Tag    string `json:"tag"`
+	Amount int    `json:"amount"`
 }
 
 type Spend struct {
@@ -28,8 +36,6 @@ type Spend struct {
 	Tag         string    `db:"tag" json:"tag"`
 	CreatedAt   time.Time `db:"created_at" json:"created_at"`
 }
-
-// we need to get all spends which were created between from and to
 
 type spends struct {
 	db *sqlx.DB
@@ -75,6 +81,18 @@ func (s *spends) GetByTag(userID int, tag string) ([]Spend, error) {
 		WHERE tag = ? AND user_id = ?
 	`
 	err := s.db.Select(&spends, query, tag, userID)
+	return spends, err
+}
+
+func (s *spends) TagsAmount(userID int, from, to time.Time) ([]TagsAmount, error) {
+	var spends []TagsAmount
+	query := `
+		SELECT tag, sum(amount) AS amount FROM spends
+		WHERE user_id = ?
+		AND created_at >= ? AND created_at <= ?
+		GROUP BY tag
+	`
+	err := s.db.Select(&spends, query, userID, from, to)
 	return spends, err
 }
 

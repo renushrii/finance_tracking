@@ -1,61 +1,61 @@
 body, html {
-    height: 100%;
+    font-family: Arial, sans-serif;
     margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #beb3b1, #887c76, #8d817d);
+    color: #ffffff;
 }
 
-.container-fluid {
-    height: 100%;
+.table {
+    margin-top: 1rem;
+    background: #dad5d5;
 }
 
-.row {
-    height: 100%;
-    margin: 0;
+.table th, .table td {
+    padding: 1rem;
+    border: 1px solid #c9c5c0;
 }
 
-.signin, .login {
-    height: -1;
-    display: flex;
-    align-items: center;
-    /* justify-content: space-evenly; */
-    padding: 50px;
+.btn-group button {
+    margin: 0 5px;
 }
 
-.signin {
-    background: linear-gradient(to right, #83a4d4, #b6fbff);
+.btn-primary, .btn-danger {
+    border: none;
 }
 
-.login {
-    background: linear-gradient(to left, #fbc2eb, #a6c1ee);
+.modal-content {.container {
+    margin-top: 2rem;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-form {
-    
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    width: 100%;
-    /* max-width: 400px;*/
+    border-radius: 8px;
 }
 
-/* style for pie chart*/
-
-.pie-chart-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+.modal-body {
+    padding: 2rem;
 }
 
-.piechart {
-    position: relative;
-    width: 200px; /* Adjust the size as needed */
-    height: 200px; /* Adjust the size as needed */
-    border-radius: 50%;
-    background-image: conic-gradient(
-        pink 70deg,
-        lightblue 0 235deg,
-        orange 0
-    );
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Chart styling */
+#myChart {
+    max-width: 100%;
+    height: auto;
+}
+
+/* If you want to add additional styling to the buttons */
+.btn-primary {
+    background-color: #272524;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
 }
